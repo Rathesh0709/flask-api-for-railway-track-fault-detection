@@ -2,22 +2,21 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from ultralytics import YOLO
 from PIL import Image
-import requests
 import os
+import gdown
 
 app = Flask(__name__)
 CORS(app)
 
 # === MODEL SETUP ===
-MODEL_PATH = "best.pt"  # Replace with your actual file ID
+MODEL_PATH = "best.pt"
+DRIVE_FILE_ID = "1-AnA0UPIwZHxdEEOKf1Ilyeqij1Bdhfm"  # your actual file ID
 
 def download_model_if_needed():
     if not os.path.exists(MODEL_PATH):
-        print("Downloading YOLO model from Google Drive...")
-        url = f"https://drive.google.com/file/d/1-AnA0UPIwZHxdEEOKf1Ilyeqij1Bdhfm/view?usp=sharing"
-        r = requests.get(url)
-        with open(MODEL_PATH, "wb") as f:
-            f.write(r.content)
+        print("Downloading YOLO model from Google Drive using gdown...")
+        url = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
+        gdown.download(url, MODEL_PATH, quiet=False)
         print("Model downloaded.")
 
 download_model_if_needed()
