@@ -1,62 +1,29 @@
-# Use official Python image
 FROM python:3.11-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Create app directory
-WORKDIR /app
-
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# System dependencies required by OpenCV and YOLO
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    libglib2.0-0 \
     libgl1-mesa-glx \
-    git \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
  && rm -rf /var/lib/apt/lists/*
 
-# Install pip dependencies
-COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Copy app files
-COPY . .
-
-# Expose port (IMPORTANT: Cloud Run listens on $PORT)
-ENV PORT 8080
-EXPOSE 8080
-
-# Start the app
-CMD ["python", "test.py"]
-# Use official Python image
-FROM python:3.11-slim
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Create app directory
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libgl1-mesa-glx \
-    git \
- && rm -rf /var/lib/apt/lists/*
-
-# Install pip dependencies
+# Copy and install Python dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app files
+# Copy the rest of the app
 COPY . .
 
-# Expose port (IMPORTANT: Cloud Run listens on $PORT)
-ENV PORT 8080
+# Set port for Google Cloud Run
+ENV PORT=8080
 EXPOSE 8080
 
-# Start the app
+# Run the app
 CMD ["python", "test.py"]
