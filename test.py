@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 # === MODEL SETUP ===
-MODEL_PATH = "/tmp/best.pt"
+MODEL_PATH = "best.pt"
 DROPBOX_URL = "https://www.dropbox.com/scl/fi/rrlu0zt6jg54kvlsws3ut/best.pt?rlkey=796n2u3qpltl0gy6l8978m109&st=0km7dbh4&dl=1"
 
 def download_model(url, model_path):
