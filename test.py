@@ -3,7 +3,6 @@ from flask_cors import CORS
 from ultralytics import YOLO
 from PIL import Image
 import os
-import gdown
 
 app = Flask(__name__)
 CORS(app)
